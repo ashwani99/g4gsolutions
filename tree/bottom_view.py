@@ -5,6 +5,9 @@ class Node(object):
         self.data = data
         self.left = self.right = None
 
+    def __repr__(self):
+        return '<Node data={}>'.format(self.data)
+
 
 class BinaryTree(object):
     def __init__(self):

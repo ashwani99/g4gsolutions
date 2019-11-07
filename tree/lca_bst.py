@@ -54,27 +54,29 @@ class BinarySearchTree(object):
         
         return stack, len(stack)
 
-    def LCS(self, node, other_node):
-        path1, count1 = self.get_path_from_root(node)
-        path2, count2 = self.get_path_from_root(other_node)
-        
-        if count1 == 0 or count2 == 0:
-            print('Not able to find nodes')
-            return
-
-        while count1 != count2:
-            if count1 > count2:
-                path1.pop()
-                count1 -= 1
+    @staticmethod
+    def LCA(root, node_data, other_node_data):
+        while root:
+            if node_data < root.data and other_node_data < root.data:
+                root = root.left
+            elif node_data > root.data and other_node_data > root.data:
+                root = root.right
             else:
-                path2.pop()
-                count2 -= 1
+                return root.data
 
-        while path1[-1] != path2[-1]:
-            path1.pop()
-            path2.pop()
+    @staticmethod
+    def LCA_recursive(root, node_data, other_node_data):
+        if root is None:
+            return None
 
-        return path1[-1]
+        if node_data < root.data and other_node_data < root.data:
+            return BinarySearchTree.LCA_recursive(
+                    root.left, node_data, other_node_data)
+        elif node_data > root.data and other_node_data > root.data:
+            return BinarySearchTree.LCA_recursive(
+                    root.right, node_data, other_node_data)
+        else:
+            return root.data
     
 
 if __name__ == '__main__':
@@ -86,4 +88,5 @@ if __name__ == '__main__':
     bst.add_node(1)
 
     BinarySearchTree.inorder(bst.root)
-    print(bst.LCS(1, 4))
+    print(BinarySearchTree.LCA_recursive(bst.root, 1, 4))
+    print(BinarySearchTree.LCA(bst.root, 1, 4))
